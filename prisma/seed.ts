@@ -1,44 +1,37 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "rachel@remix.run";
+  const patientA = await prisma.patient.create({data: {name: 'A'}});
+  const patientB = await prisma.patient.create({data: {name: 'B'}});
+  const patientC = await prisma.patient.create({data: {name: 'C'}});
+  const patientD = await prisma.patient.create({data: {name: 'D'}});
+  const patientE = await prisma.patient.create({data: {name: 'E'}});
+  const patientF = await prisma.patient.create({data: {name: 'F'}});
+  const patientG = await prisma.patient.create({data: {name: 'G'}});
+  const patientH = await prisma.patient.create({data: {name: 'H'}});
+  const patientI = await prisma.patient.create({data: {name: 'I'}});
+  const patientJ = await prisma.patient.create({data: {name: 'J'}});
 
-  // cleanup the existing database
-  await prisma.user.delete({ where: { email } }).catch(() => {
-    // no worries if it doesn't exist yet
-  });
-
-  const hashedPassword = await bcrypt.hash("racheliscool", 10);
-
-  const user = await prisma.user.create({
-    data: {
-      email,
-      password: {
-        create: {
-          hash: hashedPassword,
-        },
-      },
-    },
-  });
-
-  await prisma.note.create({
-    data: {
-      title: "My first note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
-
-  await prisma.note.create({
-    data: {
-      title: "My second note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
+  const listPatients = [patientA, patientB, patientC, patientD,
+    patientE, patientF, patientG, patientH, patientI, patientJ
+  ]
+  const listSounds = [{name: '01'}, {name: '02'}, {name: '03'}, 
+    {name: '04'}, {name: '05'}, {name: '06'}, 
+    {name: '07'}, {name: '08'}, {name: '09'}, 
+    {name: '10'}, {name: '11'}, {name: '12'}
+  ]
+  for (let patient of listPatients) {
+    for (let sound of listSounds) {
+      await prisma.sound.create({
+        data: {
+          name: sound.name,
+          patientId: patient.id
+        }
+      });
+    }
+  }
 
   console.log(`Database has been seeded. 🌱`);
 }

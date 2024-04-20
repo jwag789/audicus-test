@@ -1,4 +1,4 @@
-app = "blog-tutorial-db66"
+app = "audicus-app-test"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
